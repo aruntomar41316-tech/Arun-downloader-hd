@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ARUN HD DOWNLOADER</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080d1b;color:white;font-family:Arial;padding:20px;min-height:100vh;display:grid;place-items:center}
+.container{width:100%;max-width:430px;background:#111a2e;padding:25px 20px;border-radius:20px;text-align:center}
+h1{color:#36a5ff;font-size:25px}
+input{width:100%;padding:15px;border-radius:10px;border:1px solid #344461;background:#080f20;color:white;margin:18px 0}
+button{width:100%;padding:15px;border:0;border-radius:10px;background:#087cff;color:white;font-size:16px;font-weight:bold;margin:7px 0}
+#download{display:none;background:#10a66a;text-decoration:none;color:white;padding:15px;border-radius:10px;display:none;margin-top:12px}
+#result{background:#080f20;padding:15px;border-radius:10px;margin-top:15px;color:#c5d5ef;font-size:14px;line-height:1.6}
+footer{color:#8290a8;font-size:12px;margin-top:25px}
+</style>
+</head>
+<body>
+<div class="container">
+<div style="font-size:42px">⬇️</div>
+<h1>ARUN HD DOWNLOADER</h1>
+<p>Instagram • YouTube • Direct Video</p>
+
+<input id="link" type="url" placeholder="Paste video link here">
+
+<button onclick="paste()">📋 PASTE LINK</button>
+<button onclick="check()">CHECK VIDEO</button>
+
+<div id="result">अपना वीडियो लिंक पेस्ट करें।</div>
+<a id="download" href="#" target="_blank" rel="noopener">⬇ DOWNLOAD VIDEO</a>
+
+<footer>Made with ❤️ by ARUN TOMAR</footer>
+</div>
+
+<script>
+const link=document.getElementById("link");
+const result=document.getElementById("result");
+const download=document.getElementById("download");
+
+async function paste(){
+ try{
+  link.value=await navigator.clipboard.readText();
+ }catch(e){
+  result.textContent="लिंक को खुद पेस्ट करें।";
+ }
+}
+
+function check(){
+ download.style.display="none";
+ const value=link.value.trim();
+
+ if(!value){
+  result.textContent="पहले वीडियो लिंक डालें।";
+  return;
+ }
+
+ let url;
+ try{
+  url=new URL(value);
+  if(!["http:","https:"].includes(url.protocol)) throw Error();
+ }catch(e){
+  result.textContent="सही वीडियो लिंक डालें।";
+  return;
+ }
+
+ const host=url.hostname.toLowerCase();
+
+ if(host==="youtube.com" || host.endsWith(".youtube.com") || host==="youtu.be"){
+  result.textContent="YouTube लिंक मिला। अपने अपलोड किए वीडियो को YouTube Studio से डाउनलोड करें।";
+  return;
+ }
+
+ if(host==="instagram.com" || host.endsWith(".instagram.com")){
+  result.textContent="Instagram लिंक मिला। अपने वीडियो की मूल फाइल या Instagram के उपलब्ध डाउनलोड विकल्प का उपयोग करें।";
+  return;
+ }
+
+ if(/\.(mp4|webm|mov)$/i.test(url.pathname)){
+  result.textContent="Direct video link मिला। डाउनलोड बटन दबाएँ।";
+  download.href=url.href;
+  download.style.display="block";
+  download.setAttribute("download","");
+  return;
+ }
+
+ result.textContent="यह direct MP4 वीडियो लिंक नहीं है।";
+}
+</script>
+</body>
+</html>
